@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 import { Exclude, Transform, Type } from 'class-transformer';
 import { User } from '../entity/user';
 import { Role } from '../entity/role';
@@ -12,6 +12,9 @@ export class RegisterBody {
 
   @IsString()
   readonly password: string;
+
+  @IsArray()
+  readonly roles?: number[];
 }
 
 export class LoginBody {

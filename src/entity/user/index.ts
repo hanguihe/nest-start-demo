@@ -21,17 +21,17 @@ export class User {
   name: string;
 
   @Column({
-    type"varchar"r',
+    type: 'varchar',
     length: 30,
-    comment"密码-加密存储"',
+    comment: '密码-加密存储',
   })
   password: string;
 
   @Column({
     unique: true,
-    type: "varchar",
+    type:"varchar"',
     length: 18,
-    comment: "手机号"
+    comment:"手机号",
   })
   phone: string;
 

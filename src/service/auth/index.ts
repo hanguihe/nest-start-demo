@@ -5,13 +5,23 @@ import { RegisterBody, ResponseUser } from '../../dto/UserDTO';
 import { plainToClass } from 'class-transformer';
 import { JwtService } from '@nestjs/jwt';
 import { ServiceResult } from '../../base/ServiceResult';
+import { RoleService } from '../role';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
+    private readonly roleService: RoleService,
     private readonly jwtService: JwtService,
   ) {}
+
+  getToken(user: User) {
+    return this.jwtService.sign({
+      id: user.id,
+      phone: user.phone,
+      roles: user.roles.map(item => item.name),
+    });
+  }
 
   async validate(id: number, token: string) {
     const user = await this.userService.findUserById(id);
@@ -31,11 +41,7 @@ export class AuthService {
 
     // 校验密码
     if (user.password === password) {
-      const token = this.jwtService.sign({
-        id: user.id,
-        name: user.name,
-        roles: [],
-      });
+      const token = this.getToken(user);
 
       return ServiceResult.of(plainToClass(ResponseUser, { ...user, token }));
     }
@@ -44,18 +50,12 @@ export class AuthService {
   }
 
   async register(body: RegisterBody) {
-    let user = await this.userService.findUserByPhone(body.phone);
-    if (user) {
-      return ServiceResult.message('该手机号已注册');
-    }
-
-    user = new User();
+    const user = new User();
     user.phone = body.phone;
     user.name = body.name;
     user.password = body.password;
+    user.roles = [await this.roleService.findRoleById(1)];
 
-    user = await this.userService.saveUser(user);
-
-    return ServiceResult.of(plainToClass(ResponseUser, user));
+    return await this.userService.saveUser(user);
   }
 }

@@ -19,6 +19,7 @@ import providers from './service';
 // config
 import { JwtStrategy } from './config/jwt.strategy';
 import { MysqlService } from './config/mysql.service';
+import { AdminStrategy } from './config/admin.strategy';
 
 const envFilePath = `./resource/env/${process.env.NODE_ENV}.env`;
 
@@ -50,6 +51,7 @@ const envFilePath = `./resource/env/${process.env.NODE_ENV}.env`;
   controllers,
   providers: [
     JwtStrategy,
+    AdminStrategy,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,

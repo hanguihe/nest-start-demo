@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../entity/user';
+import { ServiceResult } from '../../base/ServiceResult';
 
 @Injectable()
 export class UserService {
@@ -32,7 +33,14 @@ export class UserService {
    * 保存用户
    * @param {User} user
    */
-  saveUser(user: User): Promise<User> {
-    return this.userRepository.save(user);
+  async saveUser(user: User) {
+    const { phone } = user;
+    const record = await this.findUserByPhone(phone);
+    if (record) {
+      return ServiceResult.message("该手机号已注册");
+    }
+
+    await this.userRepository.save(user);
+    return ServiceResult.suc();
   }
 }
