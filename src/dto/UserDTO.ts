@@ -1,6 +1,7 @@
 import { IsString } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform, Type } from 'class-transformer';
 import { User } from '../entity/user';
+import { Role } from '../entity/role';
 
 export class RegisterBody {
   @IsString()
@@ -26,4 +27,8 @@ export class ResponseUser extends User {
 
   @Exclude()
   password: string;
+
+  @Type(() => Array)
+  @Transform(value => value.map(item => item.name))
+  roles: Role[];
 }

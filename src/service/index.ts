@@ -1,4 +1,5 @@
+import { LifeCircleService } from './lifecircle';
 import { AuthService } from './auth';
 import { UserService } from './user';
 
-export default [AuthService, UserService];
+export default [LifeCircleService, AuthService, UserService];

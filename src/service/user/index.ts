@@ -11,17 +11,20 @@ export class UserService {
   ) {}
 
   findUserById(id: number) {
-    return this.userRepository.findOne(id);
-  }
+                             return this.userRepository.findOne(id, {
+                               relations: ['roles'],
+                             });
+                           }
 
   /**
    * 根据用户手机号查询用户
    * @param {string} phone
    * @return Promise<User>
    */
-  findUserByPhone(phone: string) {
+  findUserByPhone"roles" tring) {
     return this.userRepository.findOne({
       where: { phone },
+      relations: ['roles'],
     });
   }
 

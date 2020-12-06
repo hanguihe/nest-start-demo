@@ -1,7 +1,10 @@
 import { join } from 'path';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 // entity
@@ -14,14 +17,22 @@ import controllers from './controller';
 import providers from './service';
 
 // config
-import mysql from './config/mysql.config';
-import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './config/jwt.strategy';
-import { PassportModule } from '@nestjs/passport';
+import { MysqlService } from './config/mysql.service';
+
+const envFilePath = `./resource/env/${process.env.NODE_ENV}.env`;
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(mysql),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: envFilePath,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useClass: MysqlService,
+    }),
     TypeOrmModule.forFeature(entities),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
