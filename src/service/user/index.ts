@@ -12,17 +12,17 @@ export class UserService {
   ) {}
 
   findUserById(id: number) {
-                             return this.userRepository.findOne(id, {
-                               relations: ['roles'],
-                             });
-                           }
+    return this.userRepository.findOne(id, {
+      relations: ['roles'],
+    });
+  }
 
   /**
    * 根据用户手机号查询用户
    * @param {string} phone
    * @return Promise<User>
    */
-  findUserByPhone"roles" tring) {
+  findUserByPhone(phone: string) {
     return this.userRepository.findOne({
       where: { phone },
       relations: ['roles'],
@@ -37,7 +37,7 @@ export class UserService {
     const { phone } = user;
     const record = await this.findUserByPhone(phone);
     if (record) {
-      return ServiceResult.message("该手机号已注册");
+      return ServiceResult.message('该手机号已注册');
     }
 
     await this.userRepository.save(user);

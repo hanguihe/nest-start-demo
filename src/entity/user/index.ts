@@ -29,35 +29,35 @@ export class User {
 
   @Column({
     unique: true,
-    type:"varchar"',
+    type: 'varchar',
     length: 18,
-    comment:"手机号",
+    comment: '手机号',
   })
   phone: string;
 
   @Column({
     unique: true,
-    type: "varchar",
+    type: 'varchar',
     length: 30,
     nullable: true,
-    comment: "邮箱"
+    comment: '邮箱',
   })
   email: string;
 
   @ManyToMany(
     () => Role,
-    role => role.users
+    role => role.users,
   )
   @JoinTable({
-    name: "user_role",
+    name: 'user_role',
     joinColumn: {
-      name: "user_id",
-      referencedColumnName: "id"
+      name: 'user_id',
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "role_id",
-      referencedColumnName: "id"
-    }
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
   })
   roles: Role[];
 }
